@@ -7,19 +7,28 @@ export const ReceitasCadastradas = () => {
       nome: "Strogonoff",
     },
     {
-      nome: "Strogonoff",
+      nome: "Carne de Panela",
+    },
+    {
+      nome: "Carne de Panela",
     },
   ];
 
   return (
     <div
-      style={{ display: "flex", flexDirection: "column", alignItems: "center" }}
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "start",
+        background: "gray" ,
+        borderRadius: "8px",
+      }}
     >
       <div>
         <h2>Receitas Cadastradas</h2>
       </div>
       {receitas.map((e, index) => (
-        <div style={{ display: "flex", alignItems: "center" }}>
+        <div style={{ display: "flex", marginLeft: "20px " }}>
           <PiCookingPotFill />
           <h4
             style={{ paddingLeft: "15px", paddingRight: "15px", margin: "0px" }}
