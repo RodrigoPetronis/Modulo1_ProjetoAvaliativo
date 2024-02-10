@@ -28,7 +28,8 @@ function App() {
       <div style={{ display: "flex", justifyContent: "space-between" }}>
         <Filter />
         <ReceitasCadastradas />
-        <AdicionarReceitas/>
+        <CadastroReceitas />
+        
       </div>
     </div>
   );
