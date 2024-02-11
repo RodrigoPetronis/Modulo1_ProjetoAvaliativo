@@ -1,7 +1,7 @@
 import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
 import "./App.css";
-import CadastroReceitas from "./components/CadastroReceitas/CadastroReceitas";
+import CadastroReceitas from "./components/CadastroReceitas/index";
 import { Filter } from "./components/Filter";
 import { ReceitasCadastradas } from "./components/ReceitasCadastradas";
 import { AdicionarReceitas } from "./components/adicionarReceitas";
