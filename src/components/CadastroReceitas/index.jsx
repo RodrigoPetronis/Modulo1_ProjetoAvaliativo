@@ -8,6 +8,7 @@ import { Input } from "@mui/material";
 import BasicTextFields from "../atomComponents/inputComponent";
 import Checkboxes from "../atomComponents/checkBoxComponent";
 import CheckboxLabels from "../atomComponents/checkBoxComponent";
+import ContainedButtons from "../atomComponents/buttonComponent";
 
 const style = {
   display: "flex",
@@ -21,7 +22,7 @@ const style = {
   bgcolor: "#C7C8CC",
   border: "2px solid #000",
   boxShadow: 24,
-  color:"black",
+  color: "black",
   p: 4,
 };
 
@@ -42,23 +43,19 @@ export default function CadastroReceitas() {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <Typography
-            id="modal-modal-title"
-            variant="h4"
-            component="h1"
-    
-          >
+          <Typography id="modal-modal-title" variant="h4" component="h1">
             Adicionar Receita
           </Typography>
-          <BasicTextFields name={"Nome"} height={"60px"} />
-          <BasicTextFields name={"Ingredientes"} />
-          <BasicTextFields name={"Modo de Preparo"} />
+          <BasicTextFields name={"Nome da Receita"} rows={1} />
+          <BasicTextFields name={"Ingredientes"} rows={2}/>
+          <BasicTextFields name={"Modo de Preparo"} rows={4} />
+          <div style={{display:"flex", alignItems:"center", width:"100%", justifyContent:"space-evenly"}}>
+            <h4>Restrições</h4>
           <CheckboxLabels label={"Gluten"} />
           <CheckboxLabels label={"Lactose"} />
+          </div>
+          <ContainedButtons name={"Inserir"} size={"small"} color={"secondary"}/>
         </Box>
-        
-            
-        
       </Modal>
     </div>
   );
