@@ -2,9 +2,14 @@ import { PiCookingPotFill } from "react-icons/pi";
 import { RiInformationFill } from "react-icons/ri";
 
 export const ReceitasCadastradas = () => {
-  const receitas = [
+  //const  = JSON.parse(localStorage.getItem("recipe.recipeName"));
+  const receitasSalvas = JSON.parse(localStorage.getItem("recipes.recipeName")) || [];
+console.log(receitasSalvas)
+  /* const receitas = [
     {
       nome: "Strogonoff",
+      ingredientes: "carne molho, especial, batata frita",
+      modoPreparo: "Mistura tudo e está pronto"
     },
     {
       nome: "Carne de Panela",
@@ -12,7 +17,7 @@ export const ReceitasCadastradas = () => {
     {
       nome: "Carne de Panela",
     },
-  ];
+  ]; */
 
   return (
     <div
@@ -20,22 +25,32 @@ export const ReceitasCadastradas = () => {
         display: "flex",
         flexDirection: "column",
         alignItems: "start",
-        background: "gray" ,
+        background: "gray",
         borderRadius: "8px",
+        padding: "15px",
       }}
     >
       <div>
         <h2>Receitas Cadastradas</h2>
       </div>
-      {receitas.map((e, index) => (
-        <div style={{ display: "flex", marginLeft: "20px " }}>
+      {receitasSalvas.map((nome, index) => (
+        <div key={index} style={{ display: "flex", marginLeft: "20px " }}>
           <PiCookingPotFill />
           <h4
-            style={{ paddingLeft: "15px", paddingRight: "15px", margin: "0px" }}
+            style={{
+              paddingLeft: "5px",
+              paddingRight: "5px",
+              margin: "0px",
+              minWidth: "180px",
+            }}
           >
-            {e.nome}
+            {nome}
           </h4>
-          <RiInformationFill />
+          <RiInformationFill
+            onClick={() => {
+              <AlterarReceitas />;
+            }}
+          />
         </div>
       ))}
     </div>
