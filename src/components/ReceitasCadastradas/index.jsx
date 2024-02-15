@@ -1,10 +1,10 @@
+import { useEffect, useState } from "react";
 import { PiCookingPotFill } from "react-icons/pi";
 import { RiInformationFill } from "react-icons/ri";
 
 export const ReceitasCadastradas = () => {
-  //const  = JSON.parse(localStorage.getItem("recipe.recipeName"));
-  const receitasSalvas = JSON.parse(localStorage.getItem("recipes.recipeName")) || [];
-console.log(receitasSalvas)
+  const receitasSalvas = JSON.parse(localStorage.getItem("recipes")) || [];
+
   /* const receitas = [
     {
       nome: "Strogonoff",
@@ -44,7 +44,7 @@ console.log(receitasSalvas)
               minWidth: "180px",
             }}
           >
-            {nome}
+            {nome.recipeName}
           </h4>
           <RiInformationFill
             onClick={() => {
