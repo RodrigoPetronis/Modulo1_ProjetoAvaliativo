@@ -23,10 +23,12 @@ function App() {
         }}
       />
       <h1>Livro de Receitas Online</h1>
-      <div style={{ display: "flex", justifyContent: "space-between" }}>
+      <div style={{display: "flex",width:"70vw", justifyContent: "space-evenly" }}>
         <Filter />
+        <div style={{ display: "flex",}} >
         <ReceitasCadastradas />
         <CadastroReceitas />
+        </div>
       </div>
     </div>
   );

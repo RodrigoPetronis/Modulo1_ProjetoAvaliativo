@@ -34,16 +34,6 @@ export default function CadastroReceitas() {
     glutenFree: true,
     lactoseFree: true,
   });
-/* 
-()=>{
-    const recipeOnStorage = localStorage.getItem('recipes')
-    return recipeOnStorage && JSON.parse(recipeOnStorage)}
-
-    
-const [ingredients, setIngredients] = React.useState("");
-  const [preparation, setPreparation] = React.useState("");
-  const [glutenFree, setGlutenFree] = React.useState(true);
-  const [lactoseFree, setLactoseFree] = React.useState(true); */
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
