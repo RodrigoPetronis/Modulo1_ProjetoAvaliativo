@@ -6,6 +6,7 @@ import Modal from "@mui/material/Modal";
 import { AdicionarReceitas } from "../adicionarReceitas";
 import { Checkbox, TextField } from "@mui/material";
 import { toast } from "sonner";
+import { ReceitasCadastradas } from "../ReceitasCadastradas";
 
 const style = {
   display: "flex",
@@ -28,6 +29,7 @@ export default function CadastroReceitas() {
   const [open, setOpen] = React.useState(false);
 
   const [recipe, setRecipe] = React.useState({
+    id:"",
     recipeName: "",
     ingredients: "",
     preparation: "",
@@ -42,6 +44,7 @@ export default function CadastroReceitas() {
     e.preventDefault();
 
     const newRecipe = {
+      id: Math.random().toString(36).substring(2, 9),
       recipeName:recipe.recipeName,
       ingredients:recipe.ingredients,
       preparation:recipe.preparation,
@@ -103,6 +106,7 @@ console.log(storedRecipes)
               name="recipeName"
               value={recipe.recipeName}
               onChange={handleChange}
+              required
             />
             <TextField
               label="Ingredientes"
@@ -112,6 +116,7 @@ console.log(storedRecipes)
               rows={2}
               multiline
               onChange={handleChange}
+              
             />
             <TextField
               label="Modo de Preparo"
@@ -147,6 +152,7 @@ console.log(storedRecipes)
             />
           </div>
           <Button
+            onClick={()=> window.location.reload()}
             variant="contained"
             type="submit"
             size={"small"}

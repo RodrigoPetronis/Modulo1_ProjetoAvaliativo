@@ -27,8 +27,11 @@ const style = {
   p: 4,
 };
 
-export const ReceitasCadastradas = () => {
+export const ReceitasCadastradas = ({filteredState}) => {
+  const { isCheckedTodas, isGlutenFree, isLactoseFree } = filteredState;
   const [open, setOpen] = useState(false);
+  const [selectedRecipe, setSelectedRecipe] = useState({});
+
 
   const [recipe, setRecipe] = React.useState({
     recipeName: "",
@@ -45,11 +48,11 @@ export const ReceitasCadastradas = () => {
     e.preventDefault();
 
     const newRecipe = {
-      recipeName: recipe.recipeName,
-      ingredients: recipe.ingredients,
-      preparation: recipe.preparation,
-      glutenFree: recipe.glutenFree,
-      lactoseFree: recipe.lactoseFree,
+      recipeName: "",
+      ingredients: "",
+      preparation: "",
+      glutenFree: "",
+      lactoseFree: "",
     };
 
     const storedRecipes = JSON.parse(localStorage.getItem("recipes")) || [];
@@ -72,11 +75,18 @@ export const ReceitasCadastradas = () => {
     const { name, defaultValue, checked, type } = e.target;
     setRecipe((el) => ({
       ...el,
-      [name]: type === "checkbox" ? checked : defaultValue,
+      [name]: name === "glutenFree" || name === "lactoseFree" ? checked : defaultValue,
     }));
   };
 
   const receitasSalvas = JSON.parse(localStorage.getItem("recipes")) || [];
+
+  const filteredRecipes = receitasSalvas.filter((recipe) => {
+    if (isCheckedTodas) return true;
+    if (isGlutenFree && recipe.glutenFree) return false;
+    if (isLactoseFree && recipe.lactoseFree) return false;
+    return true;
+  });
 
   return (
     <div
@@ -93,7 +103,8 @@ export const ReceitasCadastradas = () => {
       <div>
         <h2>Receitas Cadastradas</h2>
       </div>
-      {receitasSalvas.map((nome, index) => (
+      
+      {filteredRecipes.map((e, index) => (
         <div key={index} style={{ display: "flex", alignItems: "center " }}>
           <PiCookingPotFill
             style={{ width: "20px", height: "25px", verticalAlign: "middle" }}
@@ -106,10 +117,14 @@ export const ReceitasCadastradas = () => {
               minWidth: "130px",
             }}
           >
-            {nome.recipeName}
+            {e.recipeName}
           </h4>
           <Button
-            onClick={handleOpen}
+            onClick={() => {
+              setSelectedRecipe(e);
+              console.log(selectedRecipe);
+              handleOpen();
+            }}
             style={{ minWidth: "0px", padding: "0px", color: "lightBlue" }}
           >
             <RiInformationFill
@@ -139,14 +154,14 @@ export const ReceitasCadastradas = () => {
                   label="Nome da Receita"
                   variant="outlined"
                   name="recipeName"
-                  defaultValue={nome.recipeName || recipe.recipeName}
+                  value={selectedRecipe.recipeName}
                   onChange={handleChange}
                 />
                 <TextField
                   label="Ingredientes"
                   variant="outlined"
                   name="ingredients"
-                  defaultValue={nome.ingredients}
+                  value={selectedRecipe.ingredients}
                   rows={2}
                   multiline
                   onChange={handleChange}
@@ -157,7 +172,7 @@ export const ReceitasCadastradas = () => {
                   name="preparation"
                   rows={3}
                   multiline
-                  defaultValue={nome.preparation}
+                  value={selectedRecipe.preparation}
                   onChange={handleChange}
                 />
               </div>
@@ -173,14 +188,14 @@ export const ReceitasCadastradas = () => {
                 <Checkbox
                   defaultChecked
                   name="glutenFree"
-                  defaultValue={nome.glutenFree}
+                  value={selectedRecipe.glutenFree}
                   onChange={handleChange}
                 />
                 <span>Lactose</span>
                 <Checkbox
                   defaultChecked
                   name="lactoseFree"
-                  defaultValue={nome.lactoseFree}
+                  value={selectedRecipe.glutenFree}
                   onChange={handleChange}
                 />
               </div>
@@ -207,7 +222,7 @@ export const ReceitasCadastradas = () => {
             </Box>
           </Modal>
         </div>
-      ))}
+              ))}
     </div>
   );
 };

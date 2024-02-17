@@ -1,10 +1,21 @@
 
+import { useState } from "react";
 import "./App.css";
 import CadastroReceitas from "./components/CadastroReceitas/index";
 import { Filter } from "./components/Filter";
 import { ReceitasCadastradas } from "./components/ReceitasCadastradas";
 
 function App() {
+  const [filteredState, setFilteredState] = useState({
+    isCheckedTodas: true,
+    isGlutenFree: true,
+    isLactoseFree: true,
+  });
+
+  const handleFilterChange = (newState) => {
+    setFilteredState(newState);
+  };
+
   return (
     <div>
       <img
@@ -24,9 +35,9 @@ function App() {
       />
       <h1>Livro de Receitas Online</h1>
       <div style={{display: "flex",width:"70vw", justifyContent: "space-evenly" }}>
-        <Filter />
+        <Filter onFilterChange={handleFilterChange} />
         <div style={{ display: "flex",}} >
-        <ReceitasCadastradas />
+        <ReceitasCadastradas filteredState={filteredState}  />
         <CadastroReceitas />
         </div>
       </div>
