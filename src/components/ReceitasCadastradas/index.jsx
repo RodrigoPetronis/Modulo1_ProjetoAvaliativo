@@ -83,10 +83,11 @@ export const ReceitasCadastradas = ({filteredState}) => {
 
   const filteredRecipes = receitasSalvas.filter((recipe) => {
     if (isCheckedTodas) return true;
-    if (isGlutenFree && recipe.glutenFree) return false;
-    if (isLactoseFree && recipe.lactoseFree) return false;
-    return true;
+    if (isGlutenFree && !recipe.glutenFree) return true;
+    if (isLactoseFree && !recipe.lactoseFree) return true;
+    return false;
   });
+  console.log(filteredRecipes)
 
   return (
     <div
@@ -186,14 +187,14 @@ export const ReceitasCadastradas = ({filteredState}) => {
                 <h4 style={{ marginRight: "12%" }}>Restrições</h4>
                 <span>Gluten</span>
                 <Checkbox
-                  defaultChecked
+                defaultChecked={selectedRecipe.glutenFree}
                   name="glutenFree"
                   value={selectedRecipe.glutenFree}
                   onChange={handleChange}
                 />
                 <span>Lactose</span>
                 <Checkbox
-                  defaultChecked
+                defaultChecked={selectedRecipe.lactoseFree}
                   name="lactoseFree"
                   value={selectedRecipe.glutenFree}
                   onChange={handleChange}
