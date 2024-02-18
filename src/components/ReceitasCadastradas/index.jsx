@@ -29,12 +29,13 @@ const style = {
   p: 4,
 };
 
-export const ReceitasCadastradas = ({ filteredState}) => {
+export const ReceitasCadastradas = ({ filteredState }) => {
   const { isCheckedTodas, isGlutenFree, isLactoseFree } = filteredState;
   const [open, setOpen] = useState(false);
   const [selectedRecipe, setSelectedRecipe] = useState({});
-  const [editedRecipe, setEditedRecipe] = useState({}); 
+  const [editedRecipe, setEditedRecipe] = useState({ selectedRecipe });
 
+  console.log("teste", selectedRecipe);
   const [recipe, setRecipe] = React.useState({
     recipeName: "",
     ingredients: "",
@@ -45,9 +46,9 @@ export const ReceitasCadastradas = ({ filteredState}) => {
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => {
-    setEditedRecipe({})
-    setOpen(false)
-  }
+    setEditedRecipe({});
+    setOpen(false);
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -128,7 +129,7 @@ export const ReceitasCadastradas = ({ filteredState}) => {
               margin: "0px",
               minWidth: "180px",
             }}
-          > 
+          >
             {e.recipeName}
           </h4>
           <Button
@@ -165,15 +166,16 @@ export const ReceitasCadastradas = ({ filteredState}) => {
                   label="Nome da Receita"
                   variant="outlined"
                   name="recipeName"
-                  defaultValue={editedRecipe !== selectedRecipe? selectedRecipe.recipeName: editedRecipe.recipeName}
+                  defaultValue={selectedRecipe.recipeName}
                   value={editedRecipe.recipeName}
                   onChange={handleChange}
                 />
-              {/*   <TextField
+                <TextField
                   label="Ingredientes"
                   variant="outlined"
                   name="ingredients"
-                  value={selectedRecipe.ingredients}
+                  defaultValue={selectedRecipe.ingredients}
+                  value={editedRecipe.ingredients}
                   rows={2}
                   multiline
                   onChange={handleChange}
@@ -183,11 +185,11 @@ export const ReceitasCadastradas = ({ filteredState}) => {
                   variant="outlined"
                   name="preparation"
                   defaultValue={selectedRecipe.preparation}
-                  value={edit.preparation}
+                  value={editedRecipe.preparation}
                   rows={3}
                   multiline
                   onChange={handleChange}
-                /> */}
+                />
               </div>
               <div
                 style={{
@@ -201,14 +203,14 @@ export const ReceitasCadastradas = ({ filteredState}) => {
                 <Checkbox
                   defaultChecked={selectedRecipe.glutenFree}
                   name="glutenFree"
-                  value={selectedRecipe.glutenFree}
+                  value={editedRecipe.glutenFree}
                   onChange={handleChange}
                 />
                 <span>Lactose</span>
                 <Checkbox
                   defaultChecked={selectedRecipe.lactoseFree}
                   name="lactoseFree"
-                  value={selectedRecipe.glutenFree}
+                  value={editedRecipe.glutenFree}
                   onChange={handleChange}
                 />
               </div>
@@ -221,7 +223,9 @@ export const ReceitasCadastradas = ({ filteredState}) => {
                     const updatedRecipes = [...receitasSalvas];
                     updatedRecipes[indexRecipe] = editedRecipe;
                     setRecipe(updatedRecipes);
-                    localStorage.setItem("recipes",JSON.stringify(updatedRecipes)
+                    localStorage.setItem(
+                      "recipes",
+                      JSON.stringify(updatedRecipes)
                     );
                     handleClose();
                     toast.success("Item editado com sucesso (Ainda Não!", {
@@ -242,21 +246,29 @@ export const ReceitasCadastradas = ({ filteredState}) => {
                 </Button>
                 <Button
                   onClick={() => {
-                    const newRecipeList = filteredRecipes.filter(
-                      (e) => e.id !== selectedRecipe.id
-                    );
-                    setRecipe(newRecipeList);
-                    localStorage.setItem(
-                      "recipes",
-                      JSON.stringify(newRecipeList)
-                    );
-                    toast.success("Item excluído com sucesso!", {
-                      style: {
-                        color: "green",
-                      },
-                      position: "top-center",
-                      duration: 1000,
-                    });
+                    if (
+                      confirm(
+                        `Deseja excluir a ${selectedRecipe.recipeName}?`
+                      ) === true
+                    ) {
+                      const newRecipeList = filteredRecipes.filter(
+                        (e) => e.id !== selectedRecipe.id
+                      );
+
+                      setRecipe(newRecipeList);
+                      localStorage.setItem(
+                        "recipes",
+                        JSON.stringify(newRecipeList)
+                      );
+                      handleClose();
+                      toast.success("Item excluído com sucesso!", {
+                        style: {
+                          color: "green",
+                        },
+                        position: "top-center",
+                        duration: 1000,
+                      });
+                    }
                   }}
                   style={{ margin: "20px" }}
                   variant="contained"
@@ -274,3 +286,4 @@ export const ReceitasCadastradas = ({ filteredState}) => {
     </div>
   );
 };
+
