@@ -11,6 +11,7 @@ function App() {
     isGlutenFree: true,
     isLactoseFree: true,
   });
+  const[countPlus,setCount]=useState(0)
 
   const handleFilterChange = (newState) => {
     setFilteredState(newState);
@@ -37,7 +38,7 @@ function App() {
       <div style={{display: "flex",width:"70vw", justifyContent: "space-evenly" }}>
         <Filter onFilterChange={handleFilterChange} />
         <div style={{ display: "flex",}} >
-        <ReceitasCadastradas filteredState={filteredState}  />
+        <ReceitasCadastradas filteredState={filteredState}/>
         <CadastroReceitas />
         </div>
       </div>

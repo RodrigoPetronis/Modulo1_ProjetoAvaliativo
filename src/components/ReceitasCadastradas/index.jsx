@@ -1,6 +1,8 @@
 import { PiCookingPotFill } from "react-icons/pi";
 import { RiInformationFill } from "react-icons/ri";
 import React, { useState } from "react";
+import { toast } from "sonner";
+
 import {
   Box,
   Button,
@@ -27,11 +29,11 @@ const style = {
   p: 4,
 };
 
-export const ReceitasCadastradas = ({filteredState}) => {
+export const ReceitasCadastradas = ({ filteredState}) => {
   const { isCheckedTodas, isGlutenFree, isLactoseFree } = filteredState;
   const [open, setOpen] = useState(false);
   const [selectedRecipe, setSelectedRecipe] = useState({});
-
+  const [editedRecipe, setEditedRecipe] = useState({}); 
 
   const [recipe, setRecipe] = React.useState({
     recipeName: "",
@@ -48,11 +50,11 @@ export const ReceitasCadastradas = ({filteredState}) => {
     e.preventDefault();
 
     const newRecipe = {
-      recipeName: "",
-      ingredients: "",
-      preparation: "",
-      glutenFree: "",
-      lactoseFree: "",
+      recipeName: selectedRecipe.recipeName,
+      ingredients: selectedRecipe.ingredients,
+      preparation: selectedRecipe.preparation,
+      glutenFree: selectedRecipe.glutenFree,
+      lactoseFree: selectedRecipe.lactoseFree,
     };
 
     const storedRecipes = JSON.parse(localStorage.getItem("recipes")) || [];
@@ -72,22 +74,22 @@ export const ReceitasCadastradas = ({filteredState}) => {
   };
 
   const handleChange = (e) => {
-    const { name, defaultValue, checked, type } = e.target;
-    setRecipe((el) => ({
+    const { name, value, checked } = e.target;
+    setEditedRecipe((el) => ({
       ...el,
-      [name]: name === "glutenFree" || name === "lactoseFree" ? checked : defaultValue,
+      [name]: name === "glutenFree" || name === "lactoseFree" ? checked : value,
     }));
   };
 
   const receitasSalvas = JSON.parse(localStorage.getItem("recipes")) || [];
 
-  const filteredRecipes = receitasSalvas.filter((recipe) => {
+  let filteredRecipes = receitasSalvas.filter((recipe) => {
     if (isCheckedTodas) return true;
     if (isGlutenFree && !recipe.glutenFree) return true;
     if (isLactoseFree && !recipe.lactoseFree) return true;
     return false;
   });
-  console.log(filteredRecipes)
+  console.log(filteredRecipes);
 
   return (
     <div
@@ -99,12 +101,18 @@ export const ReceitasCadastradas = ({filteredState}) => {
         borderRadius: "8px",
         padding: "15px",
         color: "#f0f2f1",
+        maxHeight: "200px",
+        overflow: "scroll",
+        marginTop: "0px",
+        paddingTop: "0px",
       }}
     >
       <div>
-        <h2>Receitas Cadastradas</h2>
+        <h2 style={{ color: "lightblue", fontStyle: "italic" }}>
+          Receitas Cadastradas
+        </h2>
       </div>
-      
+
       {filteredRecipes.map((e, index) => (
         <div key={index} style={{ display: "flex", alignItems: "center " }}>
           <PiCookingPotFill
@@ -115,7 +123,7 @@ export const ReceitasCadastradas = ({filteredState}) => {
               paddingLeft: "5px",
               paddingRight: "5px",
               margin: "0px",
-              minWidth: "130px",
+              minWidth: "180px",
             }}
           >
             {e.recipeName}
@@ -123,7 +131,6 @@ export const ReceitasCadastradas = ({filteredState}) => {
           <Button
             onClick={() => {
               setSelectedRecipe(e);
-              console.log(selectedRecipe);
               handleOpen();
             }}
             style={{ minWidth: "0px", padding: "0px", color: "lightBlue" }}
@@ -133,7 +140,7 @@ export const ReceitasCadastradas = ({filteredState}) => {
             />
           </Button>
 
-          <Modal
+          <Modal // Visualização das Receitas
             open={open}
             onClose={handleClose}
             aria-labelledby="modal-modal-title"
@@ -155,10 +162,11 @@ export const ReceitasCadastradas = ({filteredState}) => {
                   label="Nome da Receita"
                   variant="outlined"
                   name="recipeName"
-                  value={selectedRecipe.recipeName}
+                  defaultValue={selectedRecipe.recipeName}
+                  value={editedRecipe.recipeName}
                   onChange={handleChange}
                 />
-                <TextField
+              {/*   <TextField
                   label="Ingredientes"
                   variant="outlined"
                   name="ingredients"
@@ -171,11 +179,12 @@ export const ReceitasCadastradas = ({filteredState}) => {
                   label="Modo de Preparo"
                   variant="outlined"
                   name="preparation"
+                  defaultValue={selectedRecipe.preparation}
+                  value={edit.preparation}
                   rows={3}
                   multiline
-                  value={selectedRecipe.preparation}
                   onChange={handleChange}
-                />
+                /> */}
               </div>
               <div
                 style={{
@@ -187,14 +196,14 @@ export const ReceitasCadastradas = ({filteredState}) => {
                 <h4 style={{ marginRight: "12%" }}>Restrições</h4>
                 <span>Gluten</span>
                 <Checkbox
-                defaultChecked={selectedRecipe.glutenFree}
+                  defaultChecked={selectedRecipe.glutenFree}
                   name="glutenFree"
                   value={selectedRecipe.glutenFree}
                   onChange={handleChange}
                 />
                 <span>Lactose</span>
                 <Checkbox
-                defaultChecked={selectedRecipe.lactoseFree}
+                  defaultChecked={selectedRecipe.lactoseFree}
                   name="lactoseFree"
                   value={selectedRecipe.glutenFree}
                   onChange={handleChange}
@@ -202,15 +211,52 @@ export const ReceitasCadastradas = ({filteredState}) => {
               </div>
               <div style={{ display: "flex" }}>
                 <Button
+                  onClick={() => {
+                    const indexRecipe = receitasSalvas.findIndex(
+                      (e) => e.id === selectedRecipe.id
+                    );
+                    console.log(indexRecipe)
+                    const updatedRecipes = [...receitasSalvas];
+                    updatedRecipes[indexRecipe] = editedRecipe;
+                    setRecipe(updatedRecipes);
+                    localStorage.setItem("recipes",JSON.stringify(updatedRecipes)
+                    );
+                    handleClose();
+
+                    toast.success("Item editado com sucesso (Ainda Não!", {
+                      style: {
+                        color: "green",
+                      },
+                      position: "top-center",
+                      duration: 1000,
+                    });
+                  }}
                   style={{ margin: "20px" }}
                   variant="contained"
-                  type="submit"
+                  type="button"
                   size={"small"}
                   color={"primary"}
                 >
                   Editar
                 </Button>
                 <Button
+                  onClick={() => {
+                    const newRecipeList = filteredRecipes.filter(
+                      (e) => e.id !== selectedRecipe.id
+                    );
+                    setRecipe(newRecipeList);
+                    localStorage.setItem(
+                      "recipes",
+                      JSON.stringify(newRecipeList)
+                    );
+                    toast.success("Item excluído com sucesso!", {
+                      style: {
+                        color: "green",
+                      },
+                      position: "top-center",
+                      duration: 1000,
+                    });
+                  }}
                   style={{ margin: "20px" }}
                   variant="contained"
                   type="button"
@@ -223,7 +269,7 @@ export const ReceitasCadastradas = ({filteredState}) => {
             </Box>
           </Modal>
         </div>
-              ))}
+      ))}
     </div>
   );
 };

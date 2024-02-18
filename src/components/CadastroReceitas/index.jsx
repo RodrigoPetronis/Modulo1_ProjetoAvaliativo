@@ -6,7 +6,6 @@ import Modal from "@mui/material/Modal";
 import { AdicionarReceitas } from "../adicionarReceitas";
 import { Checkbox, TextField } from "@mui/material";
 import { toast } from "sonner";
-import { ReceitasCadastradas } from "../ReceitasCadastradas";
 
 const style = {
   display: "flex",
@@ -29,7 +28,7 @@ export default function CadastroReceitas() {
   const [open, setOpen] = React.useState(false);
 
   const [recipe, setRecipe] = React.useState({
-    id:"",
+    id: "",
     recipeName: "",
     ingredients: "",
     preparation: "",
@@ -45,17 +44,17 @@ export default function CadastroReceitas() {
 
     const newRecipe = {
       id: Math.random().toString(36).substring(2, 9),
-      recipeName:recipe.recipeName,
-      ingredients:recipe.ingredients,
-      preparation:recipe.preparation,
-      glutenFree:recipe.glutenFree,
-      lactoseFree:recipe.lactoseFree,
-    };  
-    
+      recipeName: recipe.recipeName,
+      ingredients: recipe.ingredients,
+      preparation: recipe.preparation,
+      glutenFree: recipe.glutenFree,
+      lactoseFree: recipe.lactoseFree,
+    };
+
     const storedRecipes = JSON.parse(localStorage.getItem("recipes")) || [];
-    storedRecipes.push(newRecipe)
-console.log(storedRecipes)
-    
+    storedRecipes.push(newRecipe);
+    console.log(storedRecipes);
+
     localStorage.setItem("recipes", JSON.stringify(storedRecipes));
 
     toast.success("Receita Cadastrada com Sucesso", {
@@ -116,7 +115,6 @@ console.log(storedRecipes)
               rows={2}
               multiline
               onChange={handleChange}
-              
             />
             <TextField
               label="Modo de Preparo"
@@ -152,7 +150,7 @@ console.log(storedRecipes)
             />
           </div>
           <Button
-            onClick={()=> window.location.reload()}
+            onClick={()=> {return}}
             variant="contained"
             type="submit"
             size={"small"}
