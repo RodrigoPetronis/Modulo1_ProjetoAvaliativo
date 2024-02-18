@@ -150,7 +150,7 @@ export default function CadastroReceitas() {
             />
           </div>
           <Button
-            onClick={()=> {return}}
+            onClick={()=> {window.location.reload()}}
             variant="contained"
             type="submit"
             size={"small"}
