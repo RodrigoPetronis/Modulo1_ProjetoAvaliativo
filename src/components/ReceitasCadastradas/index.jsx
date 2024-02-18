@@ -44,7 +44,10 @@ export const ReceitasCadastradas = ({ filteredState}) => {
   });
 
   const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const handleClose = () => {
+    setEditedRecipe({})
+    setOpen(false)
+  }
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -125,7 +128,7 @@ export const ReceitasCadastradas = ({ filteredState}) => {
               margin: "0px",
               minWidth: "180px",
             }}
-          >
+          > 
             {e.recipeName}
           </h4>
           <Button
@@ -162,7 +165,7 @@ export const ReceitasCadastradas = ({ filteredState}) => {
                   label="Nome da Receita"
                   variant="outlined"
                   name="recipeName"
-                  defaultValue={selectedRecipe.recipeName}
+                  defaultValue={editedRecipe !== selectedRecipe? selectedRecipe.recipeName: editedRecipe.recipeName}
                   value={editedRecipe.recipeName}
                   onChange={handleChange}
                 />
@@ -215,14 +218,12 @@ export const ReceitasCadastradas = ({ filteredState}) => {
                     const indexRecipe = receitasSalvas.findIndex(
                       (e) => e.id === selectedRecipe.id
                     );
-                    console.log(indexRecipe)
                     const updatedRecipes = [...receitasSalvas];
                     updatedRecipes[indexRecipe] = editedRecipe;
                     setRecipe(updatedRecipes);
                     localStorage.setItem("recipes",JSON.stringify(updatedRecipes)
                     );
                     handleClose();
-
                     toast.success("Item editado com sucesso (Ainda Não!", {
                       style: {
                         color: "green",
